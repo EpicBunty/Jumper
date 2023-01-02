@@ -17,7 +17,6 @@ public class ParallaxBG : MonoBehaviour
         cameraTransform = Camera.main.transform;
         lastCameraPosition = cameraTransform.position;
         Sprite sprite = GetComponent<SpriteRenderer>().sprite;
-        spritesize = (GetComponent<SpriteRenderer>().size);
         Texture2D texture = sprite.texture;
         textureUnitSizeX = texture.width / sprite.pixelsPerUnit;
         textureUnitSizeY = texture.height / sprite.pixelsPerUnit;
@@ -29,9 +28,17 @@ public class ParallaxBG : MonoBehaviour
         transform.position += new Vector3(deltaMovement.x * parallaxEffectMultiplier.x, deltaMovement.y * parallaxEffectMultiplier.y);
         lastCameraPosition = cameraTransform.position;
 
-        if (cameraTransform.position.x > (spritesize.x / 2) )
+
+        if (Mathf.Abs(cameraTransform.position.x - transform.position.x) >= textureUnitSizeX)
         {
-            transform.position = new Vector3(cameraTransform.position.x, cameraTransform.position.y);
+            float offsetPositionX = (cameraTransform.position.x - transform.position.x) % textureUnitSizeX;
+            transform.position = new Vector3(cameraTransform.position.x + offsetPositionX, transform.position.y);
         }
-            } 
+        /*
+        if (Mathf.Abs(cameraTransform.position.y - transform.position.y) >= textureUnitSizeY)
+        {
+            float offsetPositionY = (cameraTransform.position.y - transform.position.y) % textureUnitSizeY;
+            transform.position = new Vector3(transform.position.x, cameraTransform.position.y + offsetPositionY);
+        }*/
+    }
 }
