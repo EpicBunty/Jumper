@@ -6,12 +6,12 @@ public class PlayerController : MonoBehaviour
     Rigidbody2D rb2d;
     Collider2D coll;
 
-    [SerializeField] private float jumpforce, jumpheldforce, speed;
+    [SerializeField] private float jumpforce, jumpheldforce, speed , fuel;
+    [SerializeField] private bool jumpPressed, jumpHeld, flyJetpack;
     [SerializeField] private LayerMask jumpableGround;
-    [SerializeField] private GameObject[] Wings;
+    [SerializeField] private GameObject Wings1,Wings2 , jetPack, jetpackflame;
     private float horizontal;
-    [SerializeField] private bool jumpPressed, jumpHeld;
-    public bool wingsEnabled;
+    public bool wingsEnabled, jetpackEnabled;
 
 
     private void Awake()
@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         coll = gameObject.GetComponent<BoxCollider2D>();
         wingsEnabled = false;
+        jetpackEnabled = false;
+        fuel = 10;
     }
 
 
@@ -28,6 +30,7 @@ public class PlayerController : MonoBehaviour
         horizontal = Input.GetAxisRaw("Horizontal");
         jumpPressed = Input.GetKeyDown(KeyCode.Space);
         jumpHeld = Input.GetKey(KeyCode.Space);
+        flyJetpack = Input.GetKey(KeyCode.LeftControl);
 
         animator.SetFloat("y_velocity", rb2d.velocity.y);
         animator.SetFloat("x_velocity", rb2d.velocity.x);
@@ -76,12 +79,34 @@ public class PlayerController : MonoBehaviour
             {
                 rb2d.AddForce(new Vector2(0, jumpheldforce), ForceMode2D.Force);
                 //jumpholdParticle.Play();
-                Wings[1].SetActive(true); Wings[0].SetActive(true);
+                Wings1.SetActive(true); Wings2.SetActive(true);
             }
-            else { Wings[1].SetActive(false); Wings[0].SetActive(false); }
+            else { Wings1.SetActive(false); Wings2.SetActive(false); }
 
         }
     }
+    private void JetPack()
+    {
+        if (jetpackEnabled)
+        {
+            jetPack.SetActive(true);
+
+            if (flyJetpack)
+            { 
+                fuel -= Time.deltaTime;
+                jetpackflame.SetActive(true);
+                rb2d.AddForce(new Vector2(0, jumpheldforce * 2), ForceMode2D.Force);
+                if (fuel < 0)
+                {
+                    fuel = 0;
+                    jetPack.SetActive(false);
+                    jetpackEnabled = false;
+                }
+            }
+            else jetpackflame.SetActive(false);
+        }
+    }
+
 
     void Update()
     {
@@ -93,6 +118,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         JumpHold();
+        JetPack();
     }
 
     private bool OnGround()
@@ -100,14 +126,5 @@ public class PlayerController : MonoBehaviour
         //RaycastHit2D raycastHit = 
         return Physics2D.BoxCast(coll.bounds.center, coll.bounds.size, 0f, Vector2.down, .1f, jumpableGround);
     }
-
-    /*private void OnTriggerEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Wings"))
-        {
-            wingsEnabled = true;
-            //collision.gameObject.SetActive(false);
-        }
-    }*/
 
 }
