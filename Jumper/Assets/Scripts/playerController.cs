@@ -1,24 +1,25 @@
 using UnityEngine;
 
-public class playerController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     Animator animator;
     Rigidbody2D rb2d;
     Collider2D coll;
 
-    [SerializeField] private float jumpforce;
-    [SerializeField] private float jumpheldforce;
-    [SerializeField] private float speed;
+    [SerializeField] private float jumpforce, jumpheldforce, speed;
     [SerializeField] private LayerMask jumpableGround;
+    [SerializeField] private GameObject[] Wings;
     private float horizontal;
-    private bool jumpPressed;
-    private bool jumpHeld;
+    [SerializeField] private bool jumpPressed, jumpHeld;
+    public bool wingsEnabled;
+
 
     private void Awake()
     {
         rb2d = gameObject.GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         coll = gameObject.GetComponent<BoxCollider2D>();
+        wingsEnabled = false;
     }
 
 
@@ -62,20 +63,23 @@ public class playerController : MonoBehaviour
         {
             if (jumpPressed)
             {
-                
                 rb2d.AddForce(new Vector2(0, jumpforce), ForceMode2D.Impulse);
             }
-            
         }
-
     }
 
     private void JumpHold()
     {
-        if (jumpHeld)
+        if (wingsEnabled)
         {
-            rb2d.AddForce(new Vector2(0, jumpheldforce), ForceMode2D.Force);
-            //jumpholdParticle.Play();
+            if (jumpHeld)
+            {
+                rb2d.AddForce(new Vector2(0, jumpheldforce), ForceMode2D.Force);
+                //jumpholdParticle.Play();
+                Wings[1].SetActive(true); Wings[0].SetActive(true);
+            }
+            else { Wings[1].SetActive(false); Wings[0].SetActive(false); }
+
         }
     }
 
@@ -96,4 +100,14 @@ public class playerController : MonoBehaviour
         //RaycastHit2D raycastHit = 
         return Physics2D.BoxCast(coll.bounds.center, coll.bounds.size, 0f, Vector2.down, .1f, jumpableGround);
     }
+
+    /*private void OnTriggerEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Wings"))
+        {
+            wingsEnabled = true;
+            //collision.gameObject.SetActive(false);
+        }
+    }*/
+
 }

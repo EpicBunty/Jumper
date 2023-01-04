@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class flymanController : MonoBehaviour
+public class FlymanController : MonoBehaviour
 {
     Animator animator;
     Collider2D coll;
@@ -23,7 +23,7 @@ public class flymanController : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             ReverseDirection = true;
-            Debug.Log("touching ground");
+           // Debug.Log("touching ground");
         }
     }
    
@@ -33,7 +33,7 @@ public class flymanController : MonoBehaviour
         TakeOff();
         if ( (ReverseDirection) || (transform.position.y >= flyDistance))
         {
-            Debug.Log("direction reversed");
+            //Debug.Log("direction reversed");
             ReverseDirection = false;
             movespeed = -movespeed;
             //TakeOff();
