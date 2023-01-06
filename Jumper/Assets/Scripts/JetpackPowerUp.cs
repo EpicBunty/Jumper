@@ -9,6 +9,7 @@ public class JetpackPowerUp : MonoBehaviour
 
     [SerializeField] PlayerController playerController;
 
+    
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

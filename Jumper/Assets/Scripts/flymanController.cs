@@ -6,39 +6,48 @@ public class FlymanController : MonoBehaviour
     Collider2D coll;
     Rigidbody2D rb2d;
 
-    [SerializeField] private float movespeed;
+    [SerializeField] private float movespeed, direction;
     [SerializeField] private float flyDistance;
-    [SerializeField] private bool ReverseDirection;
+    [SerializeField] private bool TouchingGround;
+    [SerializeField] private Vector3 currentPos, startPos;
 
     private void Awake()
     {
         rb2d = gameObject.GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         coll = gameObject.GetComponent<BoxCollider2D>();
-        ReverseDirection = false;
+        TouchingGround = false;
+        startPos = transform.position;
+        direction = 1;
 
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            ReverseDirection = true;
-           // Debug.Log("touching ground");
+            TouchingGround = true;
+            // Debug.Log("touching ground");
         }
-    }
-   
 
-    void Update()
+    }
+
+    private void Update()
     {
-        TakeOff();
-        if ( (ReverseDirection) || (transform.position.y >= flyDistance))
+        //        TakeOff();
+        if (transform.position.y >= startPos.y + 10 || (TouchingGround))
         {
-            //Debug.Log("direction reversed");
-            ReverseDirection = false;
-            movespeed = -movespeed;
-            //TakeOff();
+            TouchingGround = false;
+            direction *= -1;
+            Debug.Log("limit Reached");
+            animator.SetFloat("movespeed", transform.position.y);
+
         }
-        animator.SetFloat("movespeed", movespeed);
+        // transform.Translate(0, movespeed*Time.deltaTime * direction, 0);
+    }
+
+    private void LateUpdate()
+    {
+        transform.Translate(0, movespeed * Time.deltaTime * direction, 0);
     }
 
     private void TakeOff()

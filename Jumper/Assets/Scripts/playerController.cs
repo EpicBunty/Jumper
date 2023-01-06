@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -6,10 +7,13 @@ public class PlayerController : MonoBehaviour
     Rigidbody2D rb2d;
     Collider2D coll;
 
-    [SerializeField] private float jumpforce, jumpheldforce, speed , fuel;
+    [SerializeField] private HealthController healthController;
+    [SerializeField] private float jumpforce, jumpheldforce, speed, fuel;
     [SerializeField] private bool jumpPressed, jumpHeld, flyJetpack;
     [SerializeField] private LayerMask jumpableGround;
-    [SerializeField] private GameObject Wings1,Wings2 , jetPack, jetpackflame;
+    [SerializeField] private GameObject Wings1, Wings2, jetPack, jetpackflame, gameoverMenu;
+    /*[SerializeField] private Slider fuelmeter;*/
+    [SerializeField] private GameObject fuelmeter;
     private float horizontal;
     public bool wingsEnabled, jetpackEnabled;
 
@@ -22,6 +26,7 @@ public class PlayerController : MonoBehaviour
         wingsEnabled = false;
         jetpackEnabled = false;
         fuel = 10;
+
     }
 
 
@@ -89,10 +94,14 @@ public class PlayerController : MonoBehaviour
     {
         if (jetpackEnabled)
         {
+            fuelmeter.gameObject.GetComponentInChildren<Slider>().value = fuel;
+            //fuelmeter.value = fuel;
+
+            fuelmeter.SetActive(true);
             jetPack.SetActive(true);
 
             if (flyJetpack)
-            { 
+            {
                 fuel -= Time.deltaTime;
                 jetpackflame.SetActive(true);
                 rb2d.AddForce(new Vector2(0, jumpheldforce * 2), ForceMode2D.Force);
@@ -127,4 +136,17 @@ public class PlayerController : MonoBehaviour
         return Physics2D.BoxCast(coll.bounds.center, coll.bounds.size, 0f, Vector2.down, .1f, jumpableGround);
     }
 
+    public void PlayerDead()
+    {
+        Time.timeScale = 0f;
+        gameoverMenu.SetActive(true);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            healthController.TakeDamage(1);
+        }
+    }
 }
