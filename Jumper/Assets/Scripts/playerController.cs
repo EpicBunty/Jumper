@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     Collider2D coll;
 
     [SerializeField] private HealthController healthController;
-    [SerializeField] private float jumpforce, jumpheldforce, speed, fuel;
+    [SerializeField] private float jumpforce, jumpheldforce, speed, fuel ,jetpackforce;
     [SerializeField] private bool jumpPressed, jumpHeld, flyJetpack;
     [SerializeField] private LayerMask jumpableGround;
     [SerializeField] private GameObject Wings1, Wings2, jetPack, jetpackflame, gameoverMenu;
@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
         coll = gameObject.GetComponent<BoxCollider2D>();
         wingsEnabled = false;
         jetpackEnabled = false;
-        fuel = 10;
+        fuel = 100;
 
     }
 
@@ -41,6 +41,8 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat("x_velocity", rb2d.velocity.x);
         animator.SetBool("onground", OnGround());
         animator.SetFloat("speed", Mathf.Abs(horizontal));
+        //animator.SetBool("wingsjump", jumpHeld);
+        animator.SetBool("jetpackjump", flyJetpack);
     }
 
     private void RunAndFlip()
@@ -67,27 +69,27 @@ public class PlayerController : MonoBehaviour
 
     private void JumpPress()
     {
-        if (OnGround())
+        if (OnGround() && jumpPressed)
         {
-            if (jumpPressed)
-            {
                 rb2d.AddForce(new Vector2(0, jumpforce), ForceMode2D.Impulse);
-            }
         }
     }
 
     private void JumpHold()
     {
-        if (wingsEnabled)
+        if ((wingsEnabled) && (jumpHeld))
         {
-            if (jumpHeld)
-            {
-                rb2d.AddForce(new Vector2(0, jumpheldforce), ForceMode2D.Force);
-                //jumpholdParticle.Play();
-                Wings1.SetActive(true); Wings2.SetActive(true);
-            }
-            else { Wings1.SetActive(false); Wings2.SetActive(false); }
-
+            rb2d.AddForce(new Vector2(0, jumpheldforce), ForceMode2D.Force);
+            //jumpholdParticle.Play();
+            Wings1.SetActive(true); Wings2.SetActive(true);
+            animator.SetBool("wingsjump", true);
+        }
+        else
+        {
+            
+                Wings1.SetActive(false); Wings2.SetActive(false);
+                animator.SetBool("wingsjump", false);
+            
         }
     }
     private void JetPack()
@@ -95,16 +97,14 @@ public class PlayerController : MonoBehaviour
         if (jetpackEnabled)
         {
             fuelmeter.gameObject.GetComponentInChildren<Slider>().value = fuel;
-            //fuelmeter.value = fuel;
-
             fuelmeter.SetActive(true);
             jetPack.SetActive(true);
 
             if (flyJetpack)
             {
-                fuel -= Time.deltaTime;
+                fuel -= Time.deltaTime * jumpforce;
                 jetpackflame.SetActive(true);
-                rb2d.AddForce(new Vector2(0, jumpheldforce * 2), ForceMode2D.Force);
+                rb2d.AddForce(new Vector2(0, jetpackforce * Time.deltaTime), ForceMode2D.Impulse);
                 if (fuel < 0)
                 {
                     fuel = 0;
@@ -121,13 +121,13 @@ public class PlayerController : MonoBehaviour
     {
         InputsAndAnimations();
         RunAndFlip();
-        JumpPress();
+        JumpPress(); JetPack();
     }
 
     private void FixedUpdate()
     {
         JumpHold();
-        JetPack();
+       
     }
 
     private bool OnGround()
