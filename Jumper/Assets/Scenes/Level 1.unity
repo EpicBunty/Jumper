@@ -465,7 +465,7 @@ MonoBehaviour:
   movespeed: 2
   directionX: 0
   directionY: 0
-  flyDistance: 2
+  flyDistance: 10
   TouchingGround: 0
   currentPos: {x: 0, y: 0, z: 0}
   startPos: {x: 0, y: 0, z: 0}
