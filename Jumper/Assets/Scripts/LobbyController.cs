@@ -15,7 +15,7 @@ public class LobbyController : MonoBehaviour
     private void Awake()
     {
 
-
+        Time.timeScale = 1;
         buttonPlay.onClick.AddListener(PlayGame);
         buttonBack.onClick.AddListener(GoBack);
         buttonQuit.onClick.AddListener(QuitGame);

@@ -1,20 +1,41 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class UIcontroller : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI BronzeCoinsUI;
-    //[SerializeField] private TextMeshProUGUI levelindicatorUI;
+    [SerializeField] private TextMeshProUGUI FinalScore;
+    [SerializeField] private TextMeshProUGUI levelindicatorUI;
+    [SerializeField] private Button ContinueButton;
+    [SerializeField] private Button restartButton;
+    [SerializeField] private Button mainMenuButton;
 
-
-    private int BronzeCoins = 0;
+    private int BronzeCoins; 
     private int level;
 
     void Start()
     {
+        restartButton.onClick.AddListener(ReloadLevel);
+        mainMenuButton.onClick.AddListener(MainMenu);
+        ContinueButton.onClick.AddListener(ContinueGame);
+        BronzeCoins = 0;
         RefreshScore();
-        //RefreshLevelIndicator();
+        RefreshLevelIndicator();
+    }
+
+    private void ContinueGame()
+    {
+        LevelManager.Instance.LoadNextScene();
+    }
+    private void ReloadLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+    private void MainMenu()
+    {
+       SceneManager.LoadScene(0);
     }
 
     public void BronzeCoinIncrement(int increment)
@@ -26,11 +47,12 @@ public class UIcontroller : MonoBehaviour
     private void RefreshScore()
     {
         BronzeCoinsUI.text = "- " + BronzeCoins;
+        FinalScore.text = "S c o r e  =  " + BronzeCoins;
     }
 
-    /*private void RefreshLevelIndicator()
+    private void RefreshLevelIndicator()
     {
-        level = SceneManager.GetActiveScene().buildIndex;// +1;
-        levelindicatorUI.text = "Level : " + level;
-    }*/
+        level = SceneManager.GetActiveScene().buildIndex;
+        levelindicatorUI.text = "Level - " + level;
+    }
 }

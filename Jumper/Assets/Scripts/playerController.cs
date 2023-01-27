@@ -8,24 +8,29 @@ public class PlayerController : MonoBehaviour
     Collider2D coll;
 
     [SerializeField] private HealthController healthController;
-    [SerializeField] private float jumpforce, jumpheldforce, speed, fuel ,jetpackforce;
-    [SerializeField] private bool jumpPressed, jumpHeld, flyJetpack;
+    [SerializeField] private Vector3 LastCheckpoint;
+
+    [SerializeField] private float jumpforce, jumpheldforce, speed, fuel, jetpackforce, fueldepletionRate;
+    //[SerializeField] 
+    private bool jumpPressed, jumpHeld, flyJetpack;
     [SerializeField] private LayerMask jumpableGround;
-    [SerializeField] private GameObject Wings1, Wings2, jetPack, jetpackflame, gameoverMenu;
-    /*[SerializeField] private Slider fuelmeter;*/
+    [SerializeField] private GameObject Wings, jetPack, jetpackflame, gameoverMenu;
     [SerializeField] private GameObject fuelmeter;
     private float horizontal;
     public bool wingsEnabled, jetpackEnabled;
 
 
+
     private void Awake()
     {
+        Time.timeScale = 1;
         rb2d = gameObject.GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         coll = gameObject.GetComponent<BoxCollider2D>();
         wingsEnabled = false;
         jetpackEnabled = false;
         fuel = 100;
+        LastCheckpoint = new Vector2(0, 0);
 
     }
 
@@ -69,9 +74,13 @@ public class PlayerController : MonoBehaviour
 
     private void JumpPress()
     {
-        if (OnGround() && jumpPressed)
+        if (OnGround())
         {
+            if (jumpPressed)
+
+            {
                 rb2d.AddForce(new Vector2(0, jumpforce), ForceMode2D.Impulse);
+            }
         }
     }
 
@@ -81,28 +90,28 @@ public class PlayerController : MonoBehaviour
         {
             rb2d.AddForce(new Vector2(0, jumpheldforce), ForceMode2D.Force);
             //jumpholdParticle.Play();
-            Wings1.SetActive(true); Wings2.SetActive(true);
+            Wings.SetActive(true);
             animator.SetBool("wingsjump", true);
         }
         else
         {
-            
-                Wings1.SetActive(false); Wings2.SetActive(false);
-                animator.SetBool("wingsjump", false);
-            
+
+            Wings.SetActive(false);
+            animator.SetBool("wingsjump", false);
+
         }
     }
     private void JetPack()
     {
         if (jetpackEnabled)
         {
-            fuelmeter.gameObject.GetComponentInChildren<Slider>().value = fuel;
+            fuelmeter.GetComponentInChildren<Slider>().value = fuel;
             fuelmeter.SetActive(true);
             jetPack.SetActive(true);
 
             if (flyJetpack)
             {
-                fuel -= Time.deltaTime * jumpforce;
+                fuel -= Time.deltaTime * fueldepletionRate;
                 jetpackflame.SetActive(true);
                 rb2d.AddForce(new Vector2(0, jetpackforce * Time.deltaTime), ForceMode2D.Impulse);
                 if (fuel < 0)
@@ -121,13 +130,13 @@ public class PlayerController : MonoBehaviour
     {
         InputsAndAnimations();
         RunAndFlip();
-        JumpPress(); JetPack();
+        JumpPress();
     }
 
     private void FixedUpdate()
     {
-        JumpHold();
-       
+        JumpHold(); JetPack();
+
     }
 
     private bool OnGround()
@@ -138,14 +147,27 @@ public class PlayerController : MonoBehaviour
 
     public void PlayerDead()
     {
-        Time.timeScale = 0f;
+        //Time.timeScale = 0f;
+        this.enabled = false;
+        fuelmeter.SetActive(false);
         gameoverMenu.SetActive(true);
     }
+
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
+            animator.SetTrigger("tookdamage");
+            healthController.TakeDamage(1);
+        }
+        else if (collision.gameObject.CompareTag("Checkpoint"))
+        {
+            LastCheckpoint = collision.gameObject.transform.position;
+        }
+        else if (collision.gameObject.CompareTag("Respawn"))
+        {
+            transform.position = LastCheckpoint;
             healthController.TakeDamage(1);
         }
     }

@@ -6,9 +6,8 @@ public class LevelManager : MonoBehaviour
 {
     private static LevelManager instance;
 
-    private Scene CurrentScene;
-    //private Scene NextScene;
-    public Scene LastScene;
+    public Scene CurrentScene, LastScene,NextScene;
+   
 
     public int LastSceneIndex;
     public int CurrentSceneIndex;
@@ -42,18 +41,17 @@ public class LevelManager : MonoBehaviour
     public void Init()
     {
 
-        //CurrentScene = SceneManager.GetActiveScene();
+        CurrentScene = SceneManager.GetActiveScene();
         CurrentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         NextSceneIndex = CurrentSceneIndex + 1;
-        //NextScene = SceneManager.GetSceneByBuildIndex(NextSceneIndex);
+        NextScene = SceneManager.GetSceneByBuildIndex(NextSceneIndex);
         if (CurrentSceneIndex != 0)
         {
             LastSceneIndex = CurrentSceneIndex;
         }
 
         Debug.Log("Current Scene is " + CurrentScene.name);
-        //Debug.Log("Next Scene is " + NextScene.name);
-        //Debug.Log("Next Scene is " + SceneManager.GetSceneByBuildIndex(NextSceneIndex).name;
+        
     }
 
     public LevelStatus GetLevelStatus(int level)
@@ -64,20 +62,16 @@ public class LevelManager : MonoBehaviour
 
     public void SetLevelStatus(int level, LevelStatus levelStatus)
     {
-        //Init();
         PlayerPrefs.SetInt(Levels[level], (int)levelStatus);
         Debug.Log("setting level " + level + " status to " + levelStatus);
     }
 
-    public void MarkCurrentLevelComplete()
+    public void LevelComplete()
     {
         SetLevelStatus(CurrentSceneIndex, LevelStatus.Completed);
-    }
-
-    public void MarkNextLevelUnlocked()
-    {
         SetLevelStatus(NextSceneIndex, LevelStatus.Unlocked);
     }
+
 
     public void LoadNextScene()
     {

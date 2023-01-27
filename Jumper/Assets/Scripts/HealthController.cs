@@ -13,9 +13,18 @@ public class HealthController : MonoBehaviour
         RefreshHealthUI();
     }
 
+    public void IncreaseHealth(int value)
+    {
+        PlayerHealth += value;
+        if (PlayerHealth > MaxHealth)
+        {
+            PlayerHealth = MaxHealth;
+        }
+        RefreshHealthUI();
+    }
+
     public void TakeDamage(int Damage)
     {
-        playerController.gameObject.GetComponent<Animator>().SetTrigger("tookdamage");
         PlayerHealth -= Damage;
         //SoundManager.Instance.Play(Sounds.PlayerTakeDamage);
         RefreshHealthUI();
