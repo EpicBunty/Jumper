@@ -2,60 +2,53 @@ using UnityEngine;
 using UnityEngine.UI;
 public class HealthController : MonoBehaviour
 {
-    [SerializeField] private Image[] health;
-    // [SerializeField] private Sprite emptyheartsprite;
-    [SerializeField] private int MaxHealth, PlayerHealth;
-    [SerializeField] PlayerController playerController;
+    [SerializeField] private PlayerController playerController;
+
+    [SerializeField] private Image[] healthImage;
+    [SerializeField] private int maxHealth, playerHealth;
 
     private void Start()
     {
-        PlayerHealth = MaxHealth;
+        playerHealth = maxHealth;
         RefreshHealthUI();
     }
 
     public void IncreaseHealth(int value)
     {
-        PlayerHealth += value;
-        if (PlayerHealth > MaxHealth)
+        playerHealth += value;
+        if (playerHealth > maxHealth)
         {
-            PlayerHealth = MaxHealth;
+            playerHealth = maxHealth;
         }
         RefreshHealthUI();
     }
 
     public void TakeDamage(int Damage)
     {
-        PlayerHealth -= Damage;
-        //SoundManager.Instance.Play(Sounds.PlayerTakeDamage);
-        RefreshHealthUI();
-
-
-        if (PlayerHealth > MaxHealth)
+        playerHealth -= Damage;
+        
+       if (playerHealth < 1)
         {
-            PlayerHealth = MaxHealth;
-        }
-        else if (PlayerHealth < 1)
-        {
-            PlayerHealth = 0;
+            playerHealth = 0;
             playerController.PlayerDead();
         }
-        Debug.Log("player health = " + PlayerHealth);
+        RefreshHealthUI();
     }
 
     public int GetPlayerHealth()
     {
-        return PlayerHealth;
+        return playerHealth;
     }
 
     void RefreshHealthUI()
     {
-        for (int i = 0; i < health.Length; i++)
+        for (int i = 0; i < healthImage.Length; i++)
         {
-            if (i < PlayerHealth)
-                health[i].gameObject.SetActive(true);
+            if (i < playerHealth)
+                healthImage[i].gameObject.SetActive(true);
             else
             {
-                health[i].gameObject.SetActive(false);
+                healthImage[i].gameObject.SetActive(false);
             }
         }
     }

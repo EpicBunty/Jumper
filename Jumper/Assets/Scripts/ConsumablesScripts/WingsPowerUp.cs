@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WingsPowerUp : MonoBehaviour
@@ -12,10 +10,16 @@ public class WingsPowerUp : MonoBehaviour
     {
         if (collision.gameObject.GetComponent<PlayerController>())
         {
-            //SoundManager.Instance.Play(Sounds.Collectible);
-            //UItextcontroller.ScoreIncrement(10);
+            SoundManager.Instance.Play(Sounds.Collectible);
             gameObject.SetActive(false);
-            playerController.wingsEnabled = true;
+            if (gameObject.CompareTag("WingsPowerup"))
+            {
+                playerController.WingsEnabled = true;
+            }
+            else if (gameObject.CompareTag("JetpackPowerup"))
+            {
+                playerController.JetpackEnabled = true;
+            }
         }
     }
 }

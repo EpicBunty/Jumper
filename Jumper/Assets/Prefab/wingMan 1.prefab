@@ -125,7 +125,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &3862535290064858354
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -167,7 +167,6 @@ MonoBehaviour:
   movespeed: 2
   directionX: 0
   directionY: 0
-  flyDistance: 10
+  flyDistance: 7
   TouchingGround: 0
-  currentPos: {x: 0, y: 0, z: 0}
   startPos: {x: 0, y: 0, z: 0}

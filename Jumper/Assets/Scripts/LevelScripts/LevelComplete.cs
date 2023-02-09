@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class LevelComplete : MonoBehaviour
 {
-    [SerializeField] private GameObject levelCompleteMenu;
+    [SerializeField] private GameObject levelcompleteMenu;
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.CompareTag("Player"))
+        if(collision.GetComponent<PlayerController>())
         {
             Debug.Log("collided with portal");
             LevelManager.Instance.LevelComplete();
-            levelCompleteMenu.SetActive(true);
+            levelcompleteMenu.SetActive(true);
             Time.timeScale = 0;
         }
     }

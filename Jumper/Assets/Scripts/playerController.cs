@@ -3,21 +3,22 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    Animator animator;
-    Rigidbody2D rb2d;
-    Collider2D coll;
-
+    private Animator animator;
+    private Rigidbody2D rb2d;
+    private Collider2D coll;
+    private const string Y_VELOCITY = "y_velocity";
+    private const string X_VELOCITY = "x_velocity";
     [SerializeField] private HealthController healthController;
-    [SerializeField] private Vector3 LastCheckpoint;
+    [SerializeField] private Vector3 lastCheckpoint;
 
-    [SerializeField] private float jumpforce, jumpheldforce, speed, fuel, jetpackforce, fueldepletionRate;
+    [SerializeField] private float jumpForce, jumpheldForce, speed, fuel, jetpackForce, fueldepletionRate;
     //[SerializeField] 
     private bool jumpPressed, jumpHeld, flyJetpack;
     [SerializeField] private LayerMask jumpableGround;
     [SerializeField] private GameObject Wings, jetPack, jetpackflame, gameoverMenu;
-    [SerializeField] private GameObject fuelmeter;
-    private float horizontal;
-    public bool wingsEnabled, jetpackEnabled;
+    [SerializeField] private GameObject fuelMeter;
+    private float horizontal, vertical;
+    public bool WingsEnabled, JetpackEnabled;
 
 
 
@@ -27,26 +28,26 @@ public class PlayerController : MonoBehaviour
         rb2d = gameObject.GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         coll = gameObject.GetComponent<BoxCollider2D>();
-        wingsEnabled = false;
-        jetpackEnabled = false;
+        WingsEnabled = false;
+        JetpackEnabled = false;
         fuel = 100;
-        LastCheckpoint = new Vector2(0, 0);
-
+        lastCheckpoint =transform.position;
+        
     }
 
 
     private void InputsAndAnimations()
     {
         horizontal = Input.GetAxisRaw("Horizontal");
-        jumpPressed = Input.GetKeyDown(KeyCode.Space);
-        jumpHeld = Input.GetKey(KeyCode.Space);
-        flyJetpack = Input.GetKey(KeyCode.LeftControl);
+        vertical = Input.GetAxisRaw("Vertical");
+        jumpPressed = Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Joystick1Button0);
+        jumpHeld = Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Joystick1Button0);
+        flyJetpack = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.Joystick1Button5); ;
 
-        animator.SetFloat("y_velocity", rb2d.velocity.y);
-        animator.SetFloat("x_velocity", rb2d.velocity.x);
+        animator.SetFloat(Y_VELOCITY, rb2d.velocity.y);
+        animator.SetFloat(X_VELOCITY, rb2d.velocity.x);
         animator.SetBool("onground", OnGround());
         animator.SetFloat("speed", Mathf.Abs(horizontal));
-        //animator.SetBool("wingsjump", jumpHeld);
         animator.SetBool("jetpackjump", flyJetpack);
     }
 
@@ -56,12 +57,10 @@ public class PlayerController : MonoBehaviour
         {
 
             Vector2 position = transform.position;
-            position.x = position.x + horizontal * speed * Time.deltaTime;
+            position.x += horizontal * speed * Time.deltaTime;
             transform.position = position;
-            /*if (SoundManager.Instance.soundEffect.isPlaying == false)
-            {
-                SoundManager.Instance.Play(Sounds.PlayerMove);
-            }*/
+
+
 
             Vector2 scale = transform.localScale;
             if (scale.x != horizontal)
@@ -74,24 +73,23 @@ public class PlayerController : MonoBehaviour
 
     private void JumpPress()
     {
-        if (OnGround())
+        if (jumpPressed)
         {
-            if (jumpPressed)
 
+            if (OnGround())
             {
-                rb2d.AddForce(new Vector2(0, jumpforce), ForceMode2D.Impulse);
+                rb2d.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
             }
         }
     }
 
     private void JumpHold()
     {
-        if ((wingsEnabled) && (jumpHeld))
+        if ((WingsEnabled) && (jumpHeld))
         {
-            rb2d.AddForce(new Vector2(0, jumpheldforce), ForceMode2D.Force);
-            //jumpholdParticle.Play();
             Wings.SetActive(true);
             animator.SetBool("wingsjump", true);
+            rb2d.AddForce(new Vector2(0, jumpheldForce), ForceMode2D.Force);
         }
         else
         {
@@ -103,22 +101,22 @@ public class PlayerController : MonoBehaviour
     }
     private void JetPack()
     {
-        if (jetpackEnabled)
+        if (JetpackEnabled)
         {
-            fuelmeter.GetComponentInChildren<Slider>().value = fuel;
-            fuelmeter.SetActive(true);
+            fuelMeter.GetComponentInChildren<Slider>().value = fuel;
+            fuelMeter.SetActive(true);
             jetPack.SetActive(true);
 
             if (flyJetpack)
             {
                 fuel -= Time.deltaTime * fueldepletionRate;
                 jetpackflame.SetActive(true);
-                rb2d.AddForce(new Vector2(0, jetpackforce * Time.deltaTime), ForceMode2D.Impulse);
+                rb2d.AddForce(new Vector2(0, jetpackForce * Time.deltaTime), ForceMode2D.Impulse);
                 if (fuel < 0)
                 {
                     fuel = 0;
                     jetPack.SetActive(false);
-                    jetpackEnabled = false;
+                    JetpackEnabled = false;
                 }
             }
             else jetpackflame.SetActive(false);
@@ -141,15 +139,14 @@ public class PlayerController : MonoBehaviour
 
     private bool OnGround()
     {
-        //RaycastHit2D raycastHit = 
         return Physics2D.BoxCast(coll.bounds.center, coll.bounds.size, 0f, Vector2.down, .1f, jumpableGround);
     }
 
     public void PlayerDead()
     {
-        //Time.timeScale = 0f;
+        Time.timeScale = 0f;
         this.enabled = false;
-        fuelmeter.SetActive(false);
+        fuelMeter.SetActive(false);
         gameoverMenu.SetActive(true);
     }
 
@@ -163,11 +160,13 @@ public class PlayerController : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Checkpoint"))
         {
-            LastCheckpoint = collision.gameObject.transform.position;
+            lastCheckpoint = collision.gameObject.transform.position;
+
         }
         else if (collision.gameObject.CompareTag("Respawn"))
         {
-            transform.position = LastCheckpoint;
+            transform.position = lastCheckpoint;
+            rb2d.velocity = new Vector2(0,0) ;
             healthController.TakeDamage(1);
         }
     }

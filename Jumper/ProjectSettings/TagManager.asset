@@ -9,6 +9,8 @@ TagManager:
   - Enemy
   - Checkpoint
   - Carrot
+  - JetpackPowerup
+  - WingsPowerup
   layers:
   - Default
   - TransparentFX

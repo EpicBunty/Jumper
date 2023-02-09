@@ -5,17 +5,12 @@ using UnityEngine.SceneManagement;
 public class LevelManager : MonoBehaviour
 {
     private static LevelManager instance;
+    public static LevelManager Instance { get { return instance; } }
 
-    public Scene CurrentScene, LastScene,NextScene;
-   
-
-    public int LastSceneIndex;
-    public int CurrentSceneIndex;
-    public int NextSceneIndex;
+    public int LastSceneIndex, CurrentSceneIndex, NextSceneIndex;
 
     public string[] Levels;
 
-    public static LevelManager Instance { get { return instance; } }
 
     private void Awake()
     {
@@ -32,7 +27,6 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
-
         if (GetLevelStatus(1) == LevelStatus.Locked)
         {
             SetLevelStatus(1, LevelStatus.Unlocked);
@@ -40,18 +34,12 @@ public class LevelManager : MonoBehaviour
     }
     public void Init()
     {
-
-        CurrentScene = SceneManager.GetActiveScene();
         CurrentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         NextSceneIndex = CurrentSceneIndex + 1;
-        NextScene = SceneManager.GetSceneByBuildIndex(NextSceneIndex);
         if (CurrentSceneIndex != 0)
         {
             LastSceneIndex = CurrentSceneIndex;
         }
-
-        Debug.Log("Current Scene is " + CurrentScene.name);
-        
     }
 
     public LevelStatus GetLevelStatus(int level)
@@ -75,7 +63,6 @@ public class LevelManager : MonoBehaviour
 
     public void LoadNextScene()
     {
-        //Init();
         SoundManager.Instance.Play(Sounds.ButtonClick);
         Debug.Log("level manager is loading next scene");// which is " + NextScene.name);
         if (CurrentSceneIndex > 4)
@@ -83,7 +70,10 @@ public class LevelManager : MonoBehaviour
             SceneManager.LoadScene(0);
         }
         else
+        {
             SceneManager.LoadScene(NextSceneIndex);
+        }
+        Init();
     }
 
 }

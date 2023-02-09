@@ -7,7 +7,7 @@ using UnityEngine;
 public class JetpackPowerUp : MonoBehaviour
 {
 
-    [SerializeField] PlayerController playerController;
+    [SerializeField] private PlayerController playerController;
 
     
 
@@ -15,10 +15,10 @@ public class JetpackPowerUp : MonoBehaviour
     {
         if (collision.gameObject.GetComponent<PlayerController>())
         {
-            //SoundManager.Instance.Play(Sounds.Collectible);
-            //UItextcontroller.ScoreIncrement(10);
+            SoundManager.Instance.Play(Sounds.Collectible);
             gameObject.SetActive(false);
-            playerController.jetpackEnabled = true;
+            playerController.JetpackEnabled = true;
         }
     }
 }
+ 

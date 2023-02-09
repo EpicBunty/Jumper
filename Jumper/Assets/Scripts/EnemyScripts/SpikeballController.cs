@@ -18,17 +18,13 @@ public class SpikeballController : MonoBehaviour
     {
         transform.Translate(movespeed * direction * Time.deltaTime, 0,0);
 
-        currentPos = transform.position.x;
-
-
-        if (currentPos >= startPos + distance || currentPos <= startPos - distance)
+        if (transform.position.x >= startPos + distance || transform.position.x <= startPos - distance)
         {
-            direction = -direction;
-            
+            direction = -direction;  
         }
-
+/*
         Vector3 Scale = transform.localScale;
         Scale.x = direction;
-        transform.localScale = Scale;
+        transform.localScale = Scale;*/
     }
 }

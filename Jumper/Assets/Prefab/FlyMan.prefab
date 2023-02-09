@@ -164,6 +164,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad33a224fe5e1be45a3e12648903ebdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movespeed: 2
-  flyDistance: 5
-  ReverseDirection: 0
+  moveSpeed: 2
+  flyDistance: 10
+  touchingGround: 0
+  currentPos: {x: 0, y: 0, z: 0}
+  startPos: {x: 0, y: 0, z: 0}

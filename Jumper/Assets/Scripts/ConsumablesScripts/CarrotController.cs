@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class CarrotController : MonoBehaviour
 {
-    public HealthController healthController;
+    [SerializeField] private HealthController healthController;
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.GetComponent<PlayerController>())
         {
+            SoundManager.Instance.Play(Sounds.Collectible);
             healthController.IncreaseHealth(1);
             gameObject.SetActive(false);
         }

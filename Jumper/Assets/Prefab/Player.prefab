@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1573968216}
   - component: {fileID: 1573968217}
   m_Layer: 0
-  m_Name: jetpack
+  m_Name: Jetpack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 1863092142}
   - component: {fileID: 1863092143}
   m_Layer: 0
-  m_Name: flame
+  m_Name: Flame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -175,7 +175,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1804729172799005947}
   m_Layer: 0
-  m_Name: wings
+  m_Name: Wings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -208,7 +208,7 @@ GameObject:
   - component: {fileID: 6214490005864461713}
   - component: {fileID: 6214490005864461712}
   m_Layer: 0
-  m_Name: wing_right
+  m_Name: Wing_right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -421,13 +421,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthController: {fileID: 0}
-  LastCheckpoint: {x: 0, y: 0, z: 0}
-  jumpforce: 11
-  jumpheldforce: 15
+  lastCheckpoint: {x: 0, y: 0, z: 0}
+  jumpForce: 12
+  jumpheldForce: 15
   speed: 7
   fuel: 0
-  jetpackforce: 30
-  fueldepletionRate: 11
+  jetpackForce: 30
+  fueldepletionRate: 10
   jumpableGround:
     serializedVersion: 2
     m_Bits: 64
@@ -435,9 +435,9 @@ MonoBehaviour:
   jetPack: {fileID: 1573968215}
   jetpackflame: {fileID: 1863092141}
   gameoverMenu: {fileID: 0}
-  fuelmeter: {fileID: 0}
-  wingsEnabled: 0
-  jetpackEnabled: 0
+  fuelMeter: {fileID: 0}
+  WingsEnabled: 0
+  JetpackEnabled: 0
 --- !u!61 &6214490006809582284
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -474,7 +474,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6214490007148777186}
   - component: {fileID: 6214490007148776989}
-  - component: {fileID: 6214490007148776991}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -540,14 +539,6 @@ Camera:
   m_OcclusionCulling: 0
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &6214490007148776991
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6214490007148776990}
-  m_Enabled: 1
 --- !u!1 &6214490007736621320
 GameObject:
   m_ObjectHideFlags: 0
@@ -559,7 +550,7 @@ GameObject:
   - component: {fileID: 6214490007736621326}
   - component: {fileID: 6214490007736621321}
   m_Layer: 0
-  m_Name: wing_left
+  m_Name: Wing_left
   m_TagString: Wings
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -656,7 +647,7 @@ Transform:
   m_GameObject: {fileID: 6214490007753847744}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.0438, y: -0.1315, z: 10}
-  m_LocalScale: {x: 3.0768168, y: 1.4752238, z: 1}
+  m_LocalScale: {x: 4, y: 4, z: 1}
   m_Children: []
   m_Father: {fileID: 6214490007148777186}
   m_RootOrder: 0

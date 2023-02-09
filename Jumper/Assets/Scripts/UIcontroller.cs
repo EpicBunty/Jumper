@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class UIcontroller : MonoBehaviour
+public class UiController : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI BronzeCoinsUI;
     [SerializeField] private TextMeshProUGUI FinalScore;

@@ -7,9 +7,7 @@ public class SoundManager : MonoBehaviour
     public static SoundManager Instance { get { return instance; } }
 
     [SerializeField] private AudioSource soundMusic;
-
-    //[SerializeField] private AudioSource soundEffect;
-    public AudioSource soundEffect;
+    [SerializeField] public AudioSource soundEffect;
     [SerializeField] private SoundType[] sounds;
     private void Awake()
     {
@@ -22,16 +20,19 @@ public class SoundManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
 
-    private void Start()
-    {
-        PlayBgMusic(Sounds.BgMusic);
+        if (LevelManager.Instance.CurrentSceneIndex == 0)
+        {
+            PlayBgMusic(Sounds.LobbyMusic);
+        }
+        else
+        {
+            PlayBgMusic(Sounds.LevelMusic);
+        }
     }
-
     public void PlayBgMusic(Sounds sound)
     {
-        AudioClip clip = getSoundClip(sound);
+        AudioClip clip = GetSoundClip(sound);
         if (clip != null)
         {
             soundMusic.clip = clip;
@@ -45,7 +46,7 @@ public class SoundManager : MonoBehaviour
 
     public void Play(Sounds sound)
     {
-        AudioClip clip = getSoundClip(sound);
+        AudioClip clip = GetSoundClip(sound);
         if (clip != null)
         {
             soundEffect.clip = clip;
@@ -59,7 +60,7 @@ public class SoundManager : MonoBehaviour
 
     public void Play(Sounds sound, float volume)
     {
-        AudioClip clip = getSoundClip(sound);
+        AudioClip clip = GetSoundClip(sound);
         if (clip != null)
         {
             soundEffect.clip = clip;
@@ -71,13 +72,15 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    private AudioClip getSoundClip(Sounds sound)
+    private AudioClip GetSoundClip(Sounds sound)
     {
         SoundType sounditem = Array.Find(sounds, item => item.soundType == sound);
         if (sounditem != null) return sounditem.soundClip;
         return null;
     }
 }
+
+
 
 [Serializable]
 public class SoundType
@@ -89,16 +92,17 @@ public class SoundType
 public enum Sounds
 {
     ButtonClick,
-    BgMusic,
-    PlayerMove,
-    PlayerDeath,
-    PlayerTakeDamage,
-    Collectible,
-    Teleporter,
+    ButtonLocked,
     ButtonBack,
+    LobbyMusic,
+    LevelMusic,
+    PlayerMove,
+    Collectible,
+    /*PlayerDeath,
+    PlayerTakeDamage,
+    Teleporter,
     JumpUp,
-    JumpLand,
-    NewLevel,
-    
-    
+    JumpLand,*/
+
+
 }
