@@ -21,6 +21,10 @@ public class SoundManager : MonoBehaviour
             Destroy(gameObject);
         }
 
+    }
+
+    private void Update()
+    {
         if (LevelManager.Instance.CurrentSceneIndex == 0)
         {
             PlayBgMusic(Sounds.LobbyMusic);

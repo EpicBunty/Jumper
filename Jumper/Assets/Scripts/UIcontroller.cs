@@ -27,6 +27,11 @@ public class UiController : MonoBehaviour
 
     private void ContinueGame()
     {
+        if (LevelManager.Instance.CurrentSceneIndex >= 2)
+        {
+            SceneManager.LoadScene(0);
+        }
+        else
         LevelManager.Instance.LoadNextScene();
     }
     private void ReloadLevel()

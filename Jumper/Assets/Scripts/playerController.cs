@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private HealthController healthController;
     [SerializeField] private Vector3 lastCheckpoint;
 
-    [SerializeField] private float jumpForce, jumpheldForce, speed, fuel, jetpackForce, fueldepletionRate;
+    [SerializeField] private float speed, jumpForce, jumpheldForce, fuel, jetpackForce, fueldepletionRate;
     //[SerializeField] 
     private bool jumpPressed, jumpHeld, flyJetpack;
     [SerializeField] private LayerMask jumpableGround;
@@ -31,8 +31,8 @@ public class PlayerController : MonoBehaviour
         WingsEnabled = false;
         JetpackEnabled = false;
         fuel = 100;
-        lastCheckpoint =transform.position;
-        
+        lastCheckpoint = transform.position;
+
     }
 
 
@@ -116,6 +116,7 @@ public class PlayerController : MonoBehaviour
                 {
                     fuel = 0;
                     jetPack.SetActive(false);
+                    fuelMeter.SetActive(false);
                     JetpackEnabled = false;
                 }
             }
@@ -155,7 +156,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            animator.SetTrigger("tookdamage");
+
             healthController.TakeDamage(1);
         }
         else if (collision.gameObject.CompareTag("Checkpoint"))
@@ -166,7 +167,7 @@ public class PlayerController : MonoBehaviour
         else if (collision.gameObject.CompareTag("Respawn"))
         {
             transform.position = lastCheckpoint;
-            rb2d.velocity = new Vector2(0,0) ;
+            rb2d.velocity = new Vector2(0, 0);
             healthController.TakeDamage(1);
         }
     }

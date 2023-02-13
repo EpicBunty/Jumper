@@ -25,6 +25,7 @@ public class HealthController : MonoBehaviour
 
     public void TakeDamage(int Damage)
     {
+        playerController.GetComponent<Animator>().SetTrigger("tookdamage");
         playerHealth -= Damage;
         
        if (playerHealth < 1)
