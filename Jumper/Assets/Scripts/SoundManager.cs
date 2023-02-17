@@ -20,20 +20,13 @@ public class SoundManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-    }
-
-    private void Update()
-    {
-        if (LevelManager.Instance.CurrentSceneIndex == 0)
-        {
+       
             PlayBgMusic(Sounds.LobbyMusic);
-        }
-        else
-        {
-            PlayBgMusic(Sounds.LevelMusic);
-        }
+       
+            //PlayBgMusic(Sounds.LevelMusic);
+        
     }
+
     public void PlayBgMusic(Sounds sound)
     {
         AudioClip clip = GetSoundClip(sound);

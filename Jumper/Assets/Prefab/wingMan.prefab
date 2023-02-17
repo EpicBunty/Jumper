@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4253089319919801461}
   m_Layer: 0
   m_Name: wingMan
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28,7 +28,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4253089319919801463}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 31.41, y: -519.43, z: 17.751287}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -125,7 +125,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &4253089319919801460
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -169,5 +169,4 @@ MonoBehaviour:
   directionY: 0
   flyDistance: 10
   TouchingGround: 0
-  currentPos: {x: 0, y: 0, z: 0}
   startPos: {x: 0, y: 0, z: 0}

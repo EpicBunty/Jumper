@@ -12,7 +12,7 @@ public class Portal : MonoBehaviour
             Debug.Log("collided with portal");
             LevelManager.Instance.LevelComplete();
             levelcompleteMenu.SetActive(true);
-            //Time.timeScale = 0;
+            Time.timeScale = 0;
         }
     }
 }

@@ -784,7 +784,7 @@ MonoBehaviour:
   buttonPlay: {fileID: 833385318}
   buttonBack: {fileID: 91256917}
   buttonQuit: {fileID: 1691101939}
-  levelselectionMenu: {fileID: 0}
+  levelselectionMenu: {fileID: 1209362714}
 --- !u!222 &483693989
 CanvasRenderer:
   m_ObjectHideFlags: 0
