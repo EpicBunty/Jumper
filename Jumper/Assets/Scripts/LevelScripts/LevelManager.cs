@@ -56,6 +56,7 @@ public class LevelManager : MonoBehaviour
 
     public void LevelComplete()
     {
+        Init();
         SetLevelStatus(CurrentSceneIndex, LevelStatus.Completed);
         if (NextSceneIndex < 3)
 
@@ -70,9 +71,8 @@ public class LevelManager : MonoBehaviour
     {
         SoundManager.Instance.Play(Sounds.ButtonClick);
         Debug.Log("level manager is loading next scene");// which is " + NextScene.name);
-
         SceneManager.LoadScene(NextSceneIndex);
-
+        SoundManager.Instance.soundMusic.Stop();
         Init();
     }
 

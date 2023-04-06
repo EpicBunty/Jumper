@@ -1,12 +1,14 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SoundManager : MonoBehaviour
 {
     private static SoundManager instance;
-    public static SoundManager Instance { get { return instance; } }
 
-    [SerializeField] private AudioSource soundMusic;
+    public static SoundManager Instance { get { return instance; } }
+    [SerializeField] public AudioSource soundMusic;
+    //public AudioSource SoundMusic { get { return soundMusic; } }
     [SerializeField] public AudioSource soundEffect;
     [SerializeField] private SoundType[] sounds;
     private void Awake()
@@ -20,13 +22,21 @@ public class SoundManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-       
-            PlayBgMusic(Sounds.LobbyMusic);
-       
-            //PlayBgMusic(Sounds.LevelMusic);
-        
-    }
 
+
+
+    }
+    private void Update()
+    {
+        while (soundMusic.isPlaying == false)
+        {
+            if (SceneManager.GetActiveScene().buildIndex == 0)
+            {
+                PlayBgMusic(Sounds.LobbyMusic);
+            }
+            else { PlayBgMusic(Sounds.LevelMusic); }
+        }
+    }
     public void PlayBgMusic(Sounds sound)
     {
         AudioClip clip = GetSoundClip(sound);
@@ -34,6 +44,7 @@ public class SoundManager : MonoBehaviour
         {
             soundMusic.clip = clip;
             soundMusic.Play();
+
         }
         else
         {

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4253089319919801460}
   - component: {fileID: 4253089319919801461}
   m_Layer: 0
-  m_Name: wingMan
+  m_Name: WingMan
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

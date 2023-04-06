@@ -27,8 +27,8 @@ public class HealthController : MonoBehaviour
     {
         playerController.GetComponent<Animator>().SetTrigger("tookdamage");
         playerHealth -= Damage;
-        
-       if (playerHealth < 1)
+
+        if (playerHealth < 1)
         {
             playerHealth = 0;
             playerController.PlayerDead();
